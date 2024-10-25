@@ -51,9 +51,17 @@ class Student {
 	private int count;
 	private Subject[] subjects; // 각 학생이 수강신청한 과목
 
+	// 생성자 오버로딩
 	public Student(int code, String name) {
 		this.code = code;
 		this.name = name;
+	}
+	
+	public Student(int code, String name, int count, Subject[] subjects) {
+		this.code = code;
+		this.name = name;
+		this.count = count;
+		this.subjects = subjects;
 	}
 
 	public int getCode() {
@@ -92,7 +100,7 @@ class Student {
 
 		for (int i = 0; i < count; i++)
 			subjects[i] = temp[i];
-		subjects[count++] = subject;
+		subjects[count ++] = subject;
 	}
 
 	// 대안으로 사용할 메소드 2
@@ -158,6 +166,7 @@ class Student {
 		for(int i=0; i<count; i++) {
 			Subject subject = subjects[i];
 			String str = String.format("ㄴ %d %s : %3d점\n", subject.getCode(), subject.getTitle(), subject.getScore());
+			info += str;
 		}
 		info += "----------";
 		return info;
@@ -212,6 +221,8 @@ class LMS {
 
 	public void run() {
 		while (isRun) {
+			// 검토용 출력문
+			System.out.println(getFileDataAsString());
 			printMainMenu();
 			selectAndRun();
 		}
@@ -611,6 +622,7 @@ class LMS {
 			for(int j=0; j<student.getCount(); j++) {
 				Subject subject = student.getSubjectByIndex(j);
 				info = "/" + subject.getCode() + "," + subject.getScore();
+				data += info;
 			}
 			data += "\n";
 		}
@@ -659,6 +671,7 @@ class LMS {
 				
 				students = new Student[count];
 				
+				int idx = 0;
 				while(bufferedReader.ready()) {
 					line = bufferedReader.readLine();
 					
@@ -668,9 +681,9 @@ class LMS {
 					
 					int code = Integer.parseInt(info[0]);
 					String name = info[1];
-					Student student = new Student(code, name);
 					
 					Subject[] subjects = new Subject[data.length - 1];
+					
 					for(int i=1; i<data.length; i++) {
 						info = data[i].split(",");
 						
@@ -678,11 +691,25 @@ class LMS {
 						String title = getSubjectTitleByCode(subCode);
 						int score = Integer.parseInt(info[1]);
 						
-						new Subject(subCode, title, score);
+						Subject subject = new Subject(subCode, title, score);
+						subjects[i - 1] = subject;
 					}
+					
+					Student student = new Student(code, name, subjects.length, subjects);
+					students[idx ++] = student;
 				}
 				
+				System.out.println("파일로드 완료");
 			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("파일로드 실패");
+			} finally {
+				try {
+					bufferedReader.close();
+					fileReader.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
