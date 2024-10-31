@@ -298,7 +298,7 @@ class ERP {
 		Tv target = tvList.get(index);
 		
 		String name = (String)input("변경할 이름", STRING);
-		tv.setName(name);
+		target.setName(name);
 	}
 	
 	private void updatePrice(Tv tv) {
@@ -307,7 +307,7 @@ class ERP {
 		
 		
 		int price = (int)input("변경할 가격", NUMBER);
-		tv.setPrice(price);
+		target.setPrice(price);
 	}
 	
 	private int size() {
