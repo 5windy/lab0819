@@ -14,6 +14,11 @@ class Tv {
 		this.price = price;
 	}
 	
+	public Tv(String name, String brand) {
+		this.name = name;
+		this.brand = brand;
+	}
+	
 	public String getName() {
 		return this.name;
 	}
@@ -36,6 +41,10 @@ class Tv {
 	
 	@Override
 	public boolean equals(Object obj) {
+		if(obj instanceof Tv) {
+			Tv target = (Tv)obj;
+			return target.getName().equals(this.name) && target.getBrand().equals(this.brand);
+		}
 		return false;
 	}
 	
@@ -132,12 +141,10 @@ class ERP {
 		Tv tv = createTv();
 		
 		// 중복 예외처리
-//		if(findTvByNameAndBrand(tv.getName(), tv.getBrand()) != null) {
-		if(tvList.contains(tv))
+		if(tvList.contains(tv)) {
 			System.err.println("동일한 상품은 중복등록이 불가합니다.");
 			return;
 		}
-		
 		tvList.add(tv);
 	}
 	
@@ -154,7 +161,7 @@ class ERP {
 	private void insertTv() {
 		Tv tv = createTv();
 		
-		if(findTvByNameAndBrand(tv.getName(), tv.getBrand()) != null) {
+		if(tvList.contains(tv)) {
 			System.err.println("동일한 상품은 중복등록이 불가합니다.");
 			return;
 		}
@@ -174,9 +181,9 @@ class ERP {
 		String name = (String)input("삭제할 TV 이름", STRING);
 		String brand = (String)input("삭제할 TV 브랜드", STRING);
 		
-		Tv tv = findTvByNameAndBrand(name, brand);
+		Tv tv = new Tv(name, brand);
 		
-		if(tv == null) {
+		if(!tvList.contains(tv)) {
 			System.out.println("존재하지 않는 상품 정보입니다.");
 			return;
 		}
@@ -268,9 +275,9 @@ class ERP {
 		String name = (String)input("대상 TV 이름", STRING);
 		String brand = (String)input("대상 TV 브랜드", STRING);
 		
-		Tv tv = findTvByNameAndBrand(name, brand);
+		Tv tv = new Tv(name, brand);
 		
-		if(tv == null) {
+		if(!tvList.contains(tv)) {
 			System.out.println("조회되지 않는 상품입니다.");
 			return;
 		}
@@ -287,11 +294,18 @@ class ERP {
 	}
 	
 	private void updateName(Tv tv) {
+		int index = tvList.indexOf(tv);
+		Tv target = tvList.get(index);
+		
 		String name = (String)input("변경할 이름", STRING);
 		tv.setName(name);
 	}
 	
 	private void updatePrice(Tv tv) {
+		int index = tvList.indexOf(tv);
+		Tv target = tvList.get(index);
+		
+		
 		int price = (int)input("변경할 가격", NUMBER);
 		tv.setPrice(price);
 	}
