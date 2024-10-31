@@ -35,6 +35,11 @@ class Tv {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		String info = String.format("%s (%s) : %d원", name, brand, price);
 		return info;
@@ -127,7 +132,8 @@ class ERP {
 		Tv tv = createTv();
 		
 		// 중복 예외처리
-		if(findTvByNameAndBrand(tv.getName(), tv.getBrand()) != null) {
+//		if(findTvByNameAndBrand(tv.getName(), tv.getBrand()) != null) {
+		if(tvList.contains(tv))
 			System.err.println("동일한 상품은 중복등록이 불가합니다.");
 			return;
 		}
@@ -178,16 +184,16 @@ class ERP {
 		tvList.remove(tv);
 	}
 	
-	private Tv findTvByNameAndBrand(String name, String brand) {
-		for(int i=0; i<tvList.size(); i++) {
-			Tv target = tvList.get(i);
-			// 중복 조건 : 이름 + 브랜드 모두 일치하면
-			if(name.equals(target.getName()) &&
-					brand.equals(target.getBrand()))
-				return target;
-		}
-		return null;
-	}
+//	private Tv findTvByNameAndBrand(String name, String brand) {
+//		for(int i=0; i<tvList.size(); i++) {
+//			Tv target = tvList.get(i);
+//			// 중복 조건 : 이름 + 브랜드 모두 일치하면
+//			if(name.equals(target.getName()) &&
+//					brand.equals(target.getBrand()))
+//				return target;
+//		}
+//		return null;
+//	}
 	
 	private void showTv() {
 		System.out.println("1) 이름으로 조회");
@@ -281,11 +287,13 @@ class ERP {
 	}
 	
 	private void updateName(Tv tv) {
-		
+		String name = (String)input("변경할 이름", STRING);
+		tv.setName(name);
 	}
 	
 	private void updatePrice(Tv tv) {
-		
+		int price = (int)input("변경할 가격", NUMBER);
+		tv.setPrice(price);
 	}
 	
 	private int size() {
