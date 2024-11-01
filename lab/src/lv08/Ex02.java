@@ -163,6 +163,9 @@ class Lms {
 
 	public void run() {
 		while(true) {
+			System.out.println("--- 더조은 ---");
+			showStudentAll();
+			System.out.println("------------");
 			printMenu();
 			runMenu();
 		}
@@ -261,6 +264,12 @@ class Lms {
 		for(int i=0; i<subjects.size(); i++) {
 			System.out.print(i + 1 + " : ");
 			System.out.println(subjects.get(i));
+		}
+	}
+	
+	private void showStudentAll() {
+		for(int i=0; i<group.size(); i++) {
+			System.out.println(group.get(i));
 		}
 	}
 	
